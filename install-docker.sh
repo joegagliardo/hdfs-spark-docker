@@ -1,6 +1,6 @@
 #! /bin/sh
-cd ~
-git clone https://github.com/joegagliardo/hdfs-spark-docker.git
+# cd ~
+# git clone https://github.com/joegagliardo/hdfs-spark-docker.git
 apt update
 apt install net-tools apt-transport-https curl gnupg-agent ca-certificates software-properties-common -y
 curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo apt-key add -
