@@ -26,11 +26,11 @@ services:
     - /data
     - /datalog
 
-  hdfs-namenode:
+  namenode:
     image: joegagliardo/hdfs:latest
     command: namenode
-    container_name: hdfs-namenode
-    hostname: hdfs-namenode
+    container_name: namenode
+    hostname: namenode
     environment:
     - HADOOP_CONF_DIR=${HADOOP_CONF_DIR}
     ports:
@@ -42,7 +42,7 @@ services:
 
   datanode-1:
     depends_on:
-    - hdfs-namenode
+    - namenode
     image: joegagliardo/hdfs:latest
     command: datanode
     container_name: datanode-1
@@ -58,7 +58,7 @@ services:
 
   datanode-2:
     depends_on:
-    - hdfs-namenode
+    - namenode
     image: joegagliardo/hdfs:latest
     command: datanode
     container_name: datanode-2
@@ -74,7 +74,7 @@ services:
 
   datanode-3:
     depends_on:
-    - hdfs-namenode
+    - namenode
     image: joegagliardo/hdfs:latest
     command: datanode
     container_name: datanode-3
@@ -87,54 +87,6 @@ services:
     - ./conf/hadoop:${HADOOP_CONF_DIR}:ro
     - /var/log/hadoop
     - ./hdfs/data3:/hdfs/data
-
-  datanode-4:
-    depends_on:
-    - hdfs-namenode
-    image: joegagliardo/hdfs:latest
-    command: datanode
-    container_name: datanode-4
-    hostname: datanode-4
-    deploy:
-      replicas: 1
-    environment:
-    - HADOOP_CONF_DIR=${HADOOP_CONF_DIR}
-    volumes:
-    - ./conf/hadoop:${HADOOP_CONF_DIR}:ro
-    - /var/log/hadoop
-    - ./hdfs/data4:/hdfs/data
-
-  datanode-5:
-    depends_on:
-    - hdfs-namenode
-    image: joegagliardo/hdfs:latest
-    command: datanode
-    container_name: datanode-5
-    hostname: datanode-5
-    deploy:
-      replicas: 1
-    environment:
-    - HADOOP_CONF_DIR=${HADOOP_CONF_DIR}
-    volumes:
-    - ./conf/hadoop:${HADOOP_CONF_DIR}:ro
-    - /var/log/hadoop
-    - ./hdfs/data5:/hdfs/data
-
-  datanode-6:
-    depends_on:
-    - hdfs-namenode
-    image: joegagliardo/hdfs:latest
-    command: datanode
-    container_name: datanode-6
-    hostname: datanode-6
-    deploy:
-      replicas: 1
-    environment:
-    - HADOOP_CONF_DIR=${HADOOP_CONF_DIR}
-    volumes:
-    - ./conf/hadoop:${HADOOP_CONF_DIR}:ro
-    - /var/log/hadoop
-    - ./hdfs/data6:/hdfs/data
 
   notebook:
     image: joegagliardo/pyspark-notebook:latest
