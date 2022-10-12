@@ -1,4 +1,6 @@
 #! /bin/sh
+cd ~
+git clone https://github.com/joegagliardo/hdfs-spark-docker.git
 apt update
 apt install net-tools apt-transport-https curl gnupg-agent ca-certificates software-properties-common -y
 curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo apt-key add -
@@ -8,7 +10,5 @@ sudo usermod -aG docker $USER
 newgrp docker
 systemctl start docker
 systemctl enable docker
-cd ~
-git clone https://github.com/joegagliardo/hdfs-spark-docker.git
-cd hdfs-spark-docker
+cd ~/hdfs-spark-docker
 docker-compose up -d
