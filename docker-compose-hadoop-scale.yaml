@@ -38,76 +38,23 @@ services:
     volumes:
     - ./conf/hadoop:${HADOOP_CONF_DIR}:ro
     - /var/log/hadoop
-    - ./hdfs/nn1:/data1
-    - ./hdfs/nn2:/data2
+    - /data/data1
+    - /data/data2
 
-  hdfs-datanode-1:
+  hdfs-datanode:
     depends_on:
     - hdfs-namenode
     image: joegagliardo/hdfs:latest
     command: datanode
-    container_name: hdfs-datanode-1
-    hostname: hdfs-datanode-1
     deploy:
-      replicas: 1
+      replicas: 3
     environment:
     - HADOOP_CONF_DIR=${HADOOP_CONF_DIR}
     volumes:
     - ./conf/hadoop:${HADOOP_CONF_DIR}:ro
     - /var/log/hadoop
-    - ./hdfs/data1/a:/data1
-    - ./hdfs/data1/b:/data2
-
-  hdfs-datanode-2:
-    depends_on:
-    - hdfs-namenode
-    image: joegagliardo/hdfs:latest
-    command: datanode
-    container_name: hdfs-datanode-2
-    hostname: hdfs-datanode-2
-    deploy:
-      replicas: 1
-    environment:
-    - HADOOP_CONF_DIR=${HADOOP_CONF_DIR}
-    volumes:
-    - ./conf/hadoop:${HADOOP_CONF_DIR}:ro
-    - /var/log/hadoop
-    - ./hdfs/data2/a:/data1
-    - ./hdfs/data2/b:/data2
-
-  hdfs-datanode-3:
-    depends_on:
-    - hdfs-namenode
-    image: joegagliardo/hdfs:latest
-    command: datanode
-    container_name: hdfs-datanode-3
-    hostname: hdfs-datanode-3
-    deploy:
-      replicas: 1
-    environment:
-    - HADOOP_CONF_DIR=${HADOOP_CONF_DIR}
-    volumes:
-    - ./conf/hadoop:${HADOOP_CONF_DIR}:ro
-    - /var/log/hadoop
-    - ./hdfs/data3/a:/data1
-    - ./hdfs/hdfs3/b:/data2
-
-  # hdfs-datanode:
-  #   depends_on:
-  #   - hdfs-namenode
-  #   image: joegagliardo/hdfs:latest
-  #   command: datanode
-  #   # container_name: hdfs-datanode
-  #   # hostname: hdfs-datanode
-  #   deploy:
-  #     replicas: 1
-  #   environment:
-  #   - HADOOP_CONF_DIR=${HADOOP_CONF_DIR}
-  #   volumes:
-  #   - ./conf/hadoop:${HADOOP_CONF_DIR}:ro
-  #   - /var/log/hadoop
-  #   - ./data1:/data1
-  #   - ./data2:/data2
+    - /data/data1
+    - /data/data2
   
   notebook:
     image: joegagliardo/pyspark-notebook:latest

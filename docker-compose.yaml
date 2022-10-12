@@ -17,7 +17,6 @@ services:
 
   zookeeper:
     image: zookeeper:latest
-    # image: zookeeper:${ZOOKEEPER_VERSION}
     container_name: zookeeper
     hostname: zookeeper
     environment:
@@ -28,7 +27,7 @@ services:
     - /datalog
 
   hdfs-namenode:
-    image: gchq/hdfs:latest
+    image: joegagliardo/hdfs:latest
     command: namenode
     container_name: hdfs-namenode
     hostname: hdfs-namenode
@@ -39,31 +38,79 @@ services:
     volumes:
     - ./conf/hadoop:${HADOOP_CONF_DIR}:ro
     - /var/log/hadoop
-    - /data1
-    - /data2
+    - ./data1:/data1
+    - ./data2:/data2
 
-  hdfs-datanode:
+  hdfs-datanode-1:
     depends_on:
     - hdfs-namenode
-    image: gchq/hdfs:latest
+    image: joegagliardo/hdfs:latest
     command: datanode
-    # container_name: hdfs-datanode
-    # hostname: hdfs-datanode
+    container_name: hdfs-datanode-1
+    hostname: hdfs-datanode-1
     deploy:
-      replicas: 3
+      replicas: 1
     environment:
     - HADOOP_CONF_DIR=${HADOOP_CONF_DIR}
     volumes:
     - ./conf/hadoop:${HADOOP_CONF_DIR}:ro
     - /var/log/hadoop
-    - /data1
-    - /data2
+    - ./data1/a:/data1
+    - ./data1/b:/data2
 
+  hdfs-datanode-2:
+    depends_on:
+    - hdfs-namenode
+    image: joegagliardo/hdfs:latest
+    command: datanode
+    container_name: hdfs-datanode-2
+    hostname: hdfs-datanode-2
+    deploy:
+      replicas: 1
+    environment:
+    - HADOOP_CONF_DIR=${HADOOP_CONF_DIR}
+    volumes:
+    - ./conf/hadoop:${HADOOP_CONF_DIR}:ro
+    - /var/log/hadoop
+    - ./data2/a:/data1
+    - ./data2/b:/data2
+
+  hdfs-datanode-3:
+    depends_on:
+    - hdfs-namenode
+    image: joegagliardo/hdfs:latest
+    command: datanode
+    container_name: hdfs-datanode-3
+    hostname: hdfs-datanode-3
+    deploy:
+      replicas: 1
+    environment:
+    - HADOOP_CONF_DIR=${HADOOP_CONF_DIR}
+    volumes:
+    - ./conf/hadoop:${HADOOP_CONF_DIR}:ro
+    - /var/log/hadoop
+    - ./data3/a:/data1
+    - ./data3/b:/data2
+
+  # hdfs-datanode:
+  #   depends_on:
+  #   - hdfs-namenode
+  #   image: joegagliardo/hdfs:latest
+  #   command: datanode
+  #   # container_name: hdfs-datanode
+  #   # hostname: hdfs-datanode
+  #   deploy:
+  #     replicas: 1
+  #   environment:
+  #   - HADOOP_CONF_DIR=${HADOOP_CONF_DIR}
+  #   volumes:
+  #   - ./conf/hadoop:${HADOOP_CONF_DIR}:ro
+  #   - /var/log/hadoop
+  #   - ./data1:/data1
+  #   - ./data2:/data2
   
   notebook:
-    # depends_on:
-    # - data-loader
-    image: gchq/gaffer-pyspark-notebook:latest
+    image: joegagliardo/pyspark-notebook:latest
     container_name: notebook
     hostname: notebook
     user: root
@@ -78,3 +125,5 @@ services:
     - ./conf/hadoop:${HADOOP_CONF_DIR}:ro
     - ./conf/spark:/opt/spark/conf:ro
     - ./examples:/home/jovyan/examples:ro
+    - ./northwind:/home/jovyan/northwind:ro
+    - ./notebooks:/home/jovyan/work
