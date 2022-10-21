@@ -16,7 +16,7 @@ version: "3.7"
 services:
 
   zookeeper:
-    image: zookeeper:7.2.2
+    image: zookeeper:latest
     container_name: zookeeper
     hostname: zookeeper
     environment:
